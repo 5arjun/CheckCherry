@@ -10,7 +10,49 @@ import Navbar from './components/Navbar';
 
 function App() {
   const [session, setSession] = useState(null);
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        setSession(session);
+
+        // Query your 'users' table to get the role for this user
+        const { data, error } = await supabase
+          .from('users')
+          .select('role')
+          .eq('id', session.user.id)
+          .single();
+
+        if (error) {
+          console.error('Error fetching user role:', error);
+        } else {
+          setRole(data.role);
+        }
+      } else {
+        setSession(null);
+        setRole(null);
+      }
+
+      setLoading(false);
+    };
+
+    fetchUser();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      // You’d want to also update role here similarly
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -32,8 +74,8 @@ function App() {
   const user = session?.user;
   const userEmail = user?.email;
 
-  const isAdmin = userEmail === 'admin@example.com'; // Change this later for real role checking
-
+  const isAdmin = role === 'admin'
+  
   return (
     <Router>
       <Navbar session={session} />
