@@ -10,6 +10,12 @@ import { supabase } from "./supabaseClient";
 import Dashboard from "./pages/Dashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminEvents from "./pages/admin/AdminEvents";
+import AdminLayout from './layouts/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminBookings from './pages/admin/AdminBookings';
+import AdminClients from './pages/admin/AdminClients';
+import AdminPackages from './pages/admin/AdminPackages';
+import AdminCalendar from './pages/admin/AdminCalendar';
 import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar";
 
