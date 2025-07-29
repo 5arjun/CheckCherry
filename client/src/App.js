@@ -74,8 +74,8 @@ function App() {
   const user = session?.user;
   const userEmail = user?.email;
 
-  const isAdmin = role === 'admin'
-  
+  const isAdmin = userEmail === 'arjunpat107@gmail.com'; // Change this later for real role checking
+
   return (
     <Router>
       <Navbar session={session} />
