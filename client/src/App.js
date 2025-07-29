@@ -10,12 +10,12 @@ import { supabase } from "./supabaseClient";
 import Dashboard from "./pages/Dashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminEvents from "./pages/admin/AdminEvents";
-import AdminLayout from './layouts/AdminLayout';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminBookings from './pages/admin/AdminBookings';
-import AdminClients from './pages/admin/AdminClients';
-import AdminPackages from './pages/admin/AdminPackages';
-import AdminCalendar from './pages/admin/AdminCalendar';
+import AdminLayout from "./layouts/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminBookings from "./pages/admin/AdminBookings";
+import AdminClients from "./pages/admin/AdminClients";
+import AdminPackages from "./pages/admin/AdminPackages";
+import AdminCalendar from "./pages/admin/AdminCalendar";
 import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar";
 
@@ -89,16 +89,27 @@ function App() {
   const user = session?.user;
   const userEmail = user?.email;
 
-  const isAdmin = userEmail === "arjunpat107@gmail.com"; // Change this later for real role checking
+  const isAdmin = userEmail?.toLowerCase() === "arjunpat107@gmail.com"; // Change this later for real role checking
 
   return (
     <Router>
-      <Navbar session={session} />
+      <Navbar session={session} isAdmin={isAdmin} />
       <Routes>
         <Route
           path="/"
-          element={session ? <Dashboard /> : <Navigate to="/login" />}
+          element={
+            session ? (
+              isAdmin ? (
+                <Navigate to="/admin/dashboard" />
+              ) : (
+                <Dashboard />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
+
         <Route path="/login" element={<LoginPage />} />
 
         {/* Admin routes */}
@@ -106,7 +117,7 @@ function App() {
           path="/admin"
           element={isAdmin ? <AdminLayout /> : <Navigate to="/" />}
         >
-          <Route index element={<AdminDashboard />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="clients" element={<AdminClients />} />
           <Route path="packages" element={<AdminPackages />} />

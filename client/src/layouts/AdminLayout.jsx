@@ -1,28 +1,27 @@
-// src/layouts/AdminLayout.jsx
-import { NavLink, Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 const AdminLayout = () => {
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Sidebar */}
-      <aside style={{
-        width: '200px',
-        background: '#f4f4f4',
-        padding: '1rem',
-        borderRight: '1px solid #ccc'
-      }}>
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <nav
+        style={{
+          width: '200px',
+          padding: '20px',
+          background: '#f4f4f4',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
+        }}
+      >
         <h3>Admin Panel</h3>
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <NavLink to="/admin" end>Dashboard</NavLink>
-          <NavLink to="/admin/bookings">Bookings</NavLink>
-          <NavLink to="/admin/clients">Clients</NavLink>
-          <NavLink to="/admin/packages">Packages</NavLink>
-          <NavLink to="/admin/calendar">Calendar</NavLink>
-        </nav>
-      </aside>
+        <Link to="/admin/dashboard">Dashboard</Link>
+        <Link to="/admin/bookings">Bookings</Link>
+        <Link to="/admin/clients">Clients</Link>
+        <Link to="/admin/packages">Packages</Link>
+        <Link to="/admin/calendar">Calendar</Link>
+      </nav>
 
-      {/* Main Content */}
-      <main style={{ flexGrow: 1, padding: '2rem' }}>
+      <main style={{ flex: 1, padding: '20px' }}>
         <Outlet />
       </main>
     </div>
