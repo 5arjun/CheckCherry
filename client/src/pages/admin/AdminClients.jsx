@@ -1,28 +1,45 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/supabase"; // make sure this is your correct Supabase client path
 
-const AdminClients = () => {
+export default function AdminClients() {
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch clients for the logged-in user
+  useEffect(() => {
+    const fetchClients = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      const { data, error } = await supabase
+        .from("clients")
+        .select("*")
+        .eq("user_id", user.id); // optional, since RLS handles this
+
+      if (error) console.error("Error fetching clients:", error);
+      else setClients(data);
+
+      setLoading(false);
+    };
+
+    fetchClients();
+  }, []);
+
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Clients</h1>
-      <button className="mb-4 px-4 py-2 bg-green-600 text-white rounded">+ New Client</button>
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2 border">Name</th>
-            <th className="p-2 border">Email</th>
-            <th className="p-2 border">Phone</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="p-2 border">Jane Smith</td>
-            <td className="p-2 border">jane@example.com</td>
-            <td className="p-2 border">555-1234</td>
-          </tr>
-        </tbody>
-      </table>
+      <h1 className="text-2xl font-bold mb-4">Clients</h1>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ul className="space-y-2">
+          {clients.map((client) => (
+            <li key={client.id} className="border p-4 rounded-md shadow">
+              <p><strong>Name:</strong> {client.name}</p>
+              <p><strong>Email:</strong> {client.email}</p>
+              {/* Add other fields here */}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
-};
-
-export default AdminClients;
+}
