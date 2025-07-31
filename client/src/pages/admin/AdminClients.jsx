@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/supabase"; // make sure this is your correct Supabase client path
+import { supabase } from '../../supabaseClient';
 
 export default function AdminClients() {
   const [clients, setClients] = useState([]);
